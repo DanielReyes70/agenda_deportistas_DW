@@ -101,7 +101,7 @@ const Formulario = () => {
             setListaDeportes([
                 ...listaDeportes,
                 { id: nanoid(), nombreNombre: nombre, nombreApellido: apellido, nombreCiudad: ciudad, 
-                    nombreEdad: edad, nombreDeporte: deporte, nombreClub: club, nombreTiempoPracticado: tiempoJugado
+                nombreEdad: edad, nombreDeporte: deporte, nombreClub: club, nombreTiempoPracticado: tiempoJugado
                  }
             ])
     
