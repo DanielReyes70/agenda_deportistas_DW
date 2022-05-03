@@ -254,7 +254,7 @@ const Formulario = () => {
                                     Ciudad: {item.nombreCiudad}<br/>
                                     Deporte: {item.nombreDeporte}<br/>
                                     Club: {item.nombreClub}<br/>
-                                    TiempoPracticado: {item.nombretiempoJugado}
+                                    TiempoJugado: {item.nombretiempoJugado}
                                     </span>
                                     <button className='btn btn-danger btn-sm float-end mx-2' onClick={() => eliminar(item.id)}>
                                         Eliminar
