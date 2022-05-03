@@ -6,10 +6,8 @@ const Formulario = () => {
     const [nombre, setNombre] = React.useState('')
     const [apellido, setApellido] = React.useState('')
     const [edad, setEdad] = React.useState('')
-    const [pais, setPais] = React.useState('')
+    const [ciudad, setCiudad] = React.useState('')
     const [deporte, setDeporte] = React.useState('')
-    const [club, setClub] = React.useState('')
-    const [tiempoJugado, setTiempoJugado] = React.useState('')
     
 
     const [listaDeportes, setListaDeportes] = React.useState([])
@@ -27,7 +25,7 @@ const Formulario = () => {
         const obtenerDatos = async() => {
             try{
                 const db = firebase.firestore()
-                const data = await db.collection('agenda deportistas').get()
+                const data = await db.collection('agenda').get()
                 const arrayData = data.docs.map(doc => (
                     {
                     id: doc.id, ...doc.data()
@@ -62,23 +60,13 @@ const Formulario = () => {
             return
         }
 
-        if (!pais.trim()) {
-            setError('digite el pais')
+        if (!ciudad.trim()) {
+            setError('digite la ciudad')
             return
         }
 
         if (!deporte.trim()) {
             setError('digite el deporte')
-            return
-        }
-
-        if (!club.trim()) {
-            setError('digite el club al que pertence')
-            return
-        }
-
-        if (!tiempoJugado.trim()) {
-            setError('digite el tiempo jugado en el club')
             return
         }
 
@@ -89,19 +77,17 @@ const Formulario = () => {
                 nombreNombre: nombre,
                 nombreApellido: apellido,
                 nombreEdad: edad,
-                nombreCiudad: pais,
-                nombreDeporte: deporte,
-                nombreClub: club,
-                nombretiempoJugado: tiempoJugado
+                nombreCiudad: ciudad,
+                nombreDeporte: deporte
             }
     
-            await db.collection('agenda deportistas').add(nuevoDeportista)
+            await db.collection('agenda').add(nuevoDeportista)
     
             
             setListaDeportes([
                 ...listaDeportes,
-                { id: nanoid(), nombreNombre: nombre, nombreApellido: apellido, nombreCiudad: pais, 
-                nombreEdad: edad, nombreDeporte: deporte, nombreClub: club, nombretiempoJugado: tiempoJugado
+                { id: nanoid(), nombreNombre: nombre, nombreApellido: apellido, nombreCiudad: ciudad, 
+                    nombreEdad: edad, nombreDeporte: deporte
                  }
             ])
     
@@ -109,12 +95,9 @@ const Formulario = () => {
             setNombre('')
             setApellido('')
             setEdad('')
-            setPais('')
+            setCiudad('')
             setDeporte('')
-            setClub('')
-            setTiempoJugado('')
             setError(null)
-            
         
         } catch (error) {
             console.log(error)
@@ -127,13 +110,10 @@ const Formulario = () => {
         setNombre(item.nombreNombre)
         setApellido(item.nombreApellido)
         setEdad(item.nombreEdad)
-        setPais(item.nombreCiudad)
+        setCiudad(item.nombreCiudad)
         setDeporte(item.nombreDeporte)
-        setClub(item.nombreClub)
-        setTiempoJugado(item.nombretiempoJugado)
         SetModoEdicion(true)
         setId(item.id);
-        
     }
     const editarDeportes =  async e => {
         e.preventDefault()
@@ -153,8 +133,8 @@ const Formulario = () => {
             return
         }
 
-        if (!pais.trim()) {
-            setError('digite el pais')
+        if (!ciudad.trim()) {
+            setError('digite la ciudad')
             return
         }
 
@@ -162,30 +142,18 @@ const Formulario = () => {
             setError('digite el deporte')
             return
         }
-
-        if (!club.trim()) {
-            setError('digite el club al que pertence')
-            return
-        }
-
-        if (!tiempoJugado.trim()) {
-            setError('digite el tiempo jugado en el club')
-            return
-        }
         try {
             const db = firebase.firestore()
-            await db.collection('agenda deportistas').doc(id).update({
+            await db.collection('agenda').doc(id).update({
             nombreNombre: nombre,
             nombreApellido: apellido,
             nombreEdad: edad,
-            nombreCiudad: pais,
-            nombreDeporte: deporte,
-            nombreClub: club,
-            nombretiempoJugado: tiempoJugado
+            nombreCiudad: ciudad,
+            nombreDeporte: deporte
             })
 
             const arrayEditado = listaDeportes.map(
-                item => item.id === id ? { id: id, nombreNombre: nombre, nombreApellido: apellido, nombreCiudad: pais, 
+                item => item.id === id ? { id: id, nombreNombre: nombre, nombreApellido: apellido, nombreCiudad: ciudad, 
                     nombreEdad: edad, nombreDeporte: deporte } : item
     
             )
@@ -193,10 +161,8 @@ const Formulario = () => {
             setNombre('')
             setApellido('')
             setEdad('')
-            setPais('')
+            setCiudad('')
             setDeporte('')
-            setClub('')
-            setTiempoJugado('')
             setId('')
             SetModoEdicion(false)
             setError(null)
@@ -211,7 +177,7 @@ const Formulario = () => {
     const eliminar = async id => {
         try {
             const db = firebase.firestore()
-            await db.collection('agenda deportistas').doc(id).delete()
+            await db.collection('agenda').doc(id).delete()
             const aux = listaDeportes.filter(item =>item.id !== id)
             setListaDeportes(aux)
         } catch (error) {
@@ -227,10 +193,8 @@ const Formulario = () => {
         setId('')
         setApellido('')
         setEdad('')
-        setPais('')
+        setCiudad('')
         setDeporte('')
-        setClub('')
-        setTiempoJugado('')
         setError(null)
     }
 
@@ -248,13 +212,12 @@ const Formulario = () => {
                             listaDeportes.map(item => (
                                 <li className='list-group-item' key={item.id}>
                                     <span className='lead'>
-                                    Nombre: {item.nombreNombre}<br/>
+                                        <img className='imagenAleatoria' src= 'https://picsum.photos/seed/237/200/300?random=1' alt = "imagenRandom"/><br/>
+                                        Nombre: {item.nombreNombre}<br/>
                                     Apellido: {item.nombreApellido}<br/>
                                     Edad: {item.nombreEdad}<br/>
                                     Ciudad: {item.nombreCiudad}<br/>
                                     Deporte: {item.nombreDeporte}<br/>
-                                    Club: {item.nombreClub}<br/>
-                                    TiempoPracticado: {item.nombretiempoJugado}
                                     </span>
                                     <button className='btn btn-danger btn-sm float-end mx-2' onClick={() => eliminar(item.id)}>
                                         Eliminar
@@ -303,9 +266,9 @@ const Formulario = () => {
                         <input
                             className='form-control mb-2'
                             type="text"
-                            placeholder='Ingrese pais'
-                            onChange={(e) => setPais(e.target.value)}
-                            value={pais}
+                            placeholder='Ingrese ciudad'
+                            onChange={(e) => setCiudad(e.target.value)}
+                            value={ciudad}
                         />
                         <input
                             className='form-control mb-2'
@@ -313,22 +276,6 @@ const Formulario = () => {
                             placeholder='Ingrese el deporte'
                             onChange={(e) => setDeporte(e.target.value)}
                             value={deporte}
-                        />
-
-                        <input
-                            className='form-control mb-2'
-                            type="text"
-                            placeholder='Ingrese el club al que pertence'
-                            onChange={(e) => setClub(e.target.value)}
-                            value={club}
-                        />
-
-                        <input
-                            className='form-control mb-2'
-                            type="text"
-                            placeholder='Ingrese el tiempo jugado en el club'
-                            onChange={(e) => setTiempoJugado(e.target.value)}
-                            value={tiempoJugado}
                         />
                         {
                             modoEdicion ?
